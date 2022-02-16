@@ -15,6 +15,17 @@ This project provides a language and host-agnostic virtual filesystem layer for 
 - **Embedded file system**: a read only file system embedded in the `.wasm` binary.
 - to be implemented more...
 
+## Installation
+
+A typical installation from the release binaries might look like the following:
+
+```console
+$ export WASI_VFS_VERSION=0.1.0
+$ curl -LO "https://github.com/kateinoigakukun/wasi-vfs/releases/download/v${WASI_VFS_VERSION}/wasi-vfs-cli-x86_64-unknown-linux-gnu.zip"
+$ unzip wasi-vfs-cli-x86_64-unknown-linux-gnu.zip
+$ mv wasi-vfs /usr/local/bin/wasi-vfs
+```
+
 ## Building
 
 To build the project, you need to install the [`wasi-sdk`](https://github.com/WebAssembly/wasi-sdk) version 14.0 or later.
