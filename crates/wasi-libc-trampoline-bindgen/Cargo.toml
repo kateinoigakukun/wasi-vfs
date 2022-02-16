@@ -1,0 +1,12 @@
+[package]
+name = "wasi-libc-trampoline-bindgen"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+witx = { path = "WASI/tools/witx" }
+heck = "0.3"
+structopt = "0.3.21"

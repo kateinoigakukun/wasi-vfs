@@ -1,0 +1,5 @@
+/tools
+/*.c.o
+/*.wasm
+fs.c
+fs.o

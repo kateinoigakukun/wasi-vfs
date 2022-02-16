@@ -1,0 +1,27 @@
+[package]
+name = "wasi-vfs"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[lib]
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
+wasi = { git = "https://github.com/bytecodealliance/wasi.git", rev = "d3c7a34193cb33d994b11104b22d234530232b5f" }
+wee_alloc = { version = "0.4.5", optional = true }
+
+
+[build-dependencies]
+cc = "1.0"
+
+[workspace]
+members = [
+  "crates/wasi-libc-trampoline-bindgen",
+  "crates/wasi-vfs-cli",
+]
+
+[features]
+trace-syscall = []
+legacy-wasi-libc = []
+module-linking = ["wee_alloc"]

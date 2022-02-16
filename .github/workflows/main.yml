@@ -1,0 +1,47 @@
+name: CI
+on: [push]
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - run: cargo check --all
+    - run: cargo fmt --all -- --check
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: Install wasmtime
+      run: |
+        set -e
+        curl -L https://github.com/bytecodealliance/wasmtime/releases/download/${WASMTIME_VERSION}/wasmtime-${WASMTIME_VERSION}-x86_64-linux.tar.xz | tar xJf -
+        echo "$PWD/wasmtime-${WASMTIME_VERSION}-x86_64-linux" >> $GITHUB_PATH
+      env:
+        WASMTIME_VERSION: v0.34.0
+    - name: Install wasi-sdk
+      run: |
+        set -e
+        wasi_sdk_deb="wasi-sdk_${WASI_SDK_VERSION_MAJOR}.${WASI_SDK_VERSION_MINOR}_amd64.deb"
+        wget "https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_SDK_VERSION_MAJOR}/${wasi_sdk_deb}"
+        sudo dpkg -i "$wasi_sdk_deb"
+        echo "WASI_SDK_PATH=/opt/wasi-sdk" >> $GITHUB_ENV
+      env:
+        WASI_SDK_VERSION_MAJOR: 14
+        WASI_SDK_VERSION_MINOR: 0
+    - run: CARGO_TARGET_WASM32_WASI_RUNNER=wasmtime cargo test --target wasm32-wasi
+    - run: cargo build --target wasm32-unknown-unknown
+    - run: LIB_WASI_VFS_A=$PWD/target/wasm32-unknown-unknown/debug/libwasi_vfs.a ./tools/run-make-test.sh
