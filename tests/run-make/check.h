@@ -95,3 +95,31 @@ static inline void _check_access(const char *path, const char *file,
 }
 
 #define check_access(path) _check_access(path, __FILE__, __func__, __LINE__)
+
+static inline void _check_file_line(const char *path, const char *expected,
+                                    const char *file, const char *func, int line) {
+  FILE *fp;
+  char *actual = NULL;
+  size_t len = 0;
+  ssize_t read;
+
+  fp = fopen(path, "r");
+  if (fp == NULL) {
+    fprintf(stderr, "Failed to open %s %s:%d (%s)\n", path, file, line,
+            func);
+    perror("fopen");
+    exit(1);
+  }
+
+  read = getline(&actual, &len, fp);
+  if (strcmp(actual, expected) != 0) {
+    fprintf(stderr, "expected '%s' but got '%s' in %s %s:%d (%s)\n", expected, actual, path, file, line, func);
+    exit(1);
+  }
+
+  fclose(fp);
+  if (actual)
+    free(actual);
+}
+
+#define check_file_line(path, expected) _check_file_line(path, expected, __FILE__, __func__, __LINE__)
