@@ -44,7 +44,7 @@ Set `$WASI_SDK_PATH` environment variable to the path of the `wasi-sdk` (version
 ### Build and run WASI application
 
 ```console
-$ git clone https://github.com/kateinoigakukun/wasi-vfs.git
+$ git clone https://github.com/kateinoigakukun/wasi-vfs.git --recurse-submodules
 $ cd wasi-vfs
 
 # Build libwasi_vfs.a
