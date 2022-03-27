@@ -406,7 +406,7 @@ pub(crate) unsafe fn fd_readdir<S: Storage>(
             let mut current_cookie = cookie;
             let mut buf = buf;
             let buf_len = buf_len as usize;
-            for entry in entries {
+            for entry in entries.skip(cookie as usize) {
                 current_cookie += 1;
                 let name_len = entry.name.len();
                 let node_id = fs.embedded_fs.get_node_id_by_link(entry.link_id);
@@ -417,16 +417,23 @@ pub(crate) unsafe fn fd_readdir<S: Storage>(
                     d_namlen: name_len as u32,
                     d_type: node_stat.filetype,
                 };
+
+                // 1. Copy dirent to the buffer
                 let dirent_len = std::mem::size_of::<wasi::Dirent>();
                 let dirent_copy_len = std::cmp::min(dirent_len, buf_len - bufused);
+                // copy dirent even though the buffer doesn't have enough remaining space
                 std::ptr::copy(&dirent as *const _ as *const u8, buf, dirent_copy_len);
+                // bail out if the remaining buffer space is not enough
                 if dirent_copy_len < dirent_len {
+                    // return the number of bytes stored in the buffer
                     return Ok(buf_len);
                 }
                 buf = buf.add(dirent_copy_len);
                 bufused += dirent_copy_len;
 
+                // 2. Copy name string to the buffer
                 let name_copy_len = std::cmp::min(name_len, buf_len - bufused);
+                // same truncation rule applied as above
                 std::ptr::copy(entry.name.as_ptr(), buf, name_copy_len);
 
                 if name_copy_len < name_len {
