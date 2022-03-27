@@ -123,6 +123,7 @@ fn env_var(name: &str) -> Option<String> {
     None
 }
 
+/// Runtime entry point to initialize the virtual file system.
 #[no_mangle]
 unsafe extern "C" fn __internal_wasi_vfs_rt_init() {
     extern "C" {
@@ -138,6 +139,7 @@ unsafe extern "C" fn __internal_wasi_vfs_rt_init() {
     }
 }
 
+/// Packing-time entry point to scan the host file system.
 #[no_mangle]
 unsafe extern "C" fn __internal_wasi_vfs_pack_fs() {
     std::panic::set_hook(Box::new(|info| {
