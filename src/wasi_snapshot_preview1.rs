@@ -488,11 +488,11 @@ pub(crate) unsafe fn fd_seek<S: Storage>(
 ) -> Result<Filesize, Error> {
     let fd = fs.get_backing_fd(fd)?;
     fn compute_new_offset(base: usize, offset: Filedelta) -> Result<usize, Error> {
-        let new_offset = if offset > 0 {
+        let new_offset = if offset >= 0 {
             base + (offset as usize)
         } else {
             let neg_offset = (-offset) as usize;
-            if neg_offset < base {
+            if neg_offset <= base {
                 base - neg_offset
             } else {
                 return Err(wasi::ERRNO_INVAL.into());
