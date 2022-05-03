@@ -21,8 +21,21 @@ A typical installation from the release binaries might look like the following:
 
 ```console
 $ export WASI_VFS_VERSION=0.1.0
+
+# For x86_64 Linux host machine
 $ curl -LO "https://github.com/kateinoigakukun/wasi-vfs/releases/download/v${WASI_VFS_VERSION}/wasi-vfs-cli-x86_64-unknown-linux-gnu.zip"
 $ unzip wasi-vfs-cli-x86_64-unknown-linux-gnu.zip
+
+# For x86_64 macOS host machine
+$ curl -LO "https://github.com/kateinoigakukun/wasi-vfs/releases/download/v${WASI_VFS_VERSION}/wasi-vfs-cli-x86_64-apple-darwin.zip"
+$ unzip wasi-vfs-cli-x86_64-apple-darwin.zip
+
+# For arm64 macOS host machine
+$ curl -LO "https://github.com/kateinoigakukun/wasi-vfs/releases/download/v${WASI_VFS_VERSION}/wasi-vfs-cli-aarch64-apple-darwin.zip"
+$ unzip wasi-vfs-cli-aarch64-apple-darwin.zip
+
+# See release page for more platforms: https://github.com/kateinoigakukun/wasi-vfs/releases
+
 $ mv wasi-vfs /usr/local/bin/wasi-vfs
 ```
 
@@ -31,7 +44,20 @@ $ mv wasi-vfs /usr/local/bin/wasi-vfs
 To build the project, you need to install the [`wasi-sdk`](https://github.com/WebAssembly/wasi-sdk) version 14.0 or later.
 
 ```console
-$ export WASI_SDK_PATH=/path/to/wasi-sdk
+$ git clone https://github.com/kateinoigakukun/wasi-vfs.git --recurse-submodules
+$ cd wasi-vfs
+$ export WASI_VERSION=14
+$ export WASI_VERSION_FULL=${WASI_VERSION}.0
+
+# For x86_64 Linux host machine
+$ curl -LO https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_VERSION}/wasi-sdk-${WASI_VERSION_FULL}-linux.tar.gz
+$ tar xvf wasi-sdk-${WASI_VERSION_FULL}-linux.tar.gz
+
+# For x86_64 and arm64 macOS host machine (since wasi-sdk doesn't provide prebuilt binaries for M1, so use x64 binaries on Rosetta)
+$ curl -LO https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${WASI_VERSION}/wasi-sdk-${WASI_VERSION_FULL}-macos.tar.gz
+$ tar xvf wasi-sdk-${WASI_VERSION_FULL}-macos.tar.gz
+
+$ export WASI_SDK_PATH=$PWD/wasi-sdk-${WASI_VERSION_FULL}
 $ cargo build --target wasm32-unknown-unknown
 ```
 
