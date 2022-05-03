@@ -17,6 +17,8 @@ This project provides a language and host-agnostic virtual filesystem layer for 
 
 ## Installation
 
+### Binary
+
 A typical installation from the release binaries might look like the following:
 
 ```console
@@ -37,6 +39,13 @@ $ unzip wasi-vfs-cli-aarch64-apple-darwin.zip
 # See release page for more platforms: https://github.com/kateinoigakukun/wasi-vfs/releases
 
 $ mv wasi-vfs /usr/local/bin/wasi-vfs
+```
+
+### Homebrew
+
+```console
+$ brew tap kateinoigakukun/wasi-vfs https://github.com/kateinoigakukun/wasi-vfs.git
+$ brew install kateinoigakukun/wasi-vfs/wasi-vfs
 ```
 
 ## Building
