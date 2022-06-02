@@ -2,7 +2,12 @@
 name = "wasi-vfs"
 version = "0.1.1"
 edition = "2021"
+authors = ["Yuta Saito <kateinoigakukun@gmail.com>"]
 license = "MIT"
+description = "A virtual filesystem layer for WASI"
+repository = "https://github.com/kateinoigakukun/wasi-vfs"
+categories = ["wasm"]
+keywords = ["webassembly", "wasm", "wasi"]
 
 [lib]
 crate-type = ["staticlib", "cdylib"]
