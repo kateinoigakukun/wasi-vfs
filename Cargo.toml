@@ -8,7 +8,7 @@ license = "MIT"
 crate-type = ["staticlib", "cdylib"]
 
 [dependencies]
-wasi = { git = "https://github.com/bytecodealliance/wasi.git", rev = "d3c7a34193cb33d994b11104b22d234530232b5f" }
+wasi = "0.11.0"
 wee_alloc = { version = "0.4.5", optional = true }
 
 
