@@ -1,6 +1,6 @@
 # wasi-vfs
 
-![Crates.io](https://img.shields.io/crates/v/wasi-vfs)
+[![Crates.io](https://img.shields.io/crates/v/wasi-vfs)](https://crates.io/crates/wasi-vfs)
 
 A virtual filesystem layer for WASI.
 
