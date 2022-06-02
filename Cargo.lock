@@ -1262,7 +1262,7 @@ dependencies = [
 
 [[package]]
 name = "wasi-vfs"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "cc",
  "wasi 0.10.2+wasi-snapshot-preview1 (git+https://github.com/bytecodealliance/wasi.git?rev=d3c7a34193cb33d994b11104b22d234530232b5f)",
