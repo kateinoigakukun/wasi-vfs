@@ -1,5 +1,7 @@
 # wasi-vfs
 
+![Crates.io](https://img.shields.io/crates/v/wasi-vfs)
+
 A virtual filesystem layer for WASI.
 
 > **NOTICE**: This project currently supports only WASI applications on the top of [wasi-libc](https://github.com/webassembly/wasi-libc)
