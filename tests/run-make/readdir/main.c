@@ -7,5 +7,6 @@ int main(int argc, char *argv[]) {
   // Check that pagination of readdir is working
   // 200 entries is enough to fill the initial readdir buffer
   check_dir_entry_size("/mnt/grow-buffer", 200);
+  check_dir_entry_size("/mnt/empty-dir", 0);
   return 0;
 }
