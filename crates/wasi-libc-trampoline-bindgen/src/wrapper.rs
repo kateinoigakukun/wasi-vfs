@@ -174,31 +174,47 @@ fn render_trace_syscall_entry_format_args(func: &InterfaceFunc, src: &mut String
     src.push_str(func.name.as_str());
     src.push('(');
 
-    let mut raw_arg_names = vec![];
+    let mut name_and_values = vec![];
+    let mut arg_idx = 0;
     for param in func.params.iter() {
+        let name = String::from(param.name.as_str());
         match &**param.tref.type_() {
-            Type::List(_) => {
-                raw_arg_names.push(String::from(param.name.as_str()));
-                raw_arg_names.push(format!("{}_len", param.name.as_str()));
+            Type::List(element) => {
+                let ptr = format!("arg{}", arg_idx);
+                let len = format!("arg{}", arg_idx + 1);
+                match **element.type_() {
+                    Type::Builtin(BuiltinType::Char) => {
+                        name_and_values.push((name, format!("{{
+                            let str_bytes = core::slice::from_raw_parts({} as *const u8, ({} + 1) as usize);
+                            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+                            cstr.to_str().unwrap().to_string()
+                        }}", ptr, len)));
+                    }
+                    _ => {
+                        name_and_values.push((name.clone(), ptr));
+                        name_and_values.push((format!("{}_len", name), len));
+                    }
+                }
+                arg_idx += 2;
             }
             _ => {
-                raw_arg_names.push(String::from(param.name.as_str()));
+                name_and_values.push((name, format!("arg{}", arg_idx)));
+                arg_idx += 1;
             }
         }
     }
 
     src.push_str(
-        &raw_arg_names
+        &name_and_values
             .iter()
-            .map(|name| format!("{}: {{}}", name))
+            .map(|(name, _)| format!("{}: {{}}", name))
             .collect::<Vec<_>>()
             .join(", "),
     );
     src.push_str(")\\n\"");
-    for (i, _) in raw_arg_names.iter().enumerate() {
+    for (_, value) in name_and_values.iter() {
         src.push_str(", ");
-        src.push_str("arg");
-        src.push_str(&i.to_string());
+        src.push_str(value);
     }
     src.push(')');
 }

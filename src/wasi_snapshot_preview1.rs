@@ -769,7 +769,7 @@ pub(crate) unsafe fn path_readlink<S: Storage>(
 ) -> Result<Size, Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_INVAL.into()),
         BackingFd::Wasi(fd) => {
             let mut rp0 = MaybeUninit::<Size>::uninit();
             let ret = wasi::wasi_snapshot_preview1::path_readlink(

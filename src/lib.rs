@@ -361,10 +361,13 @@ impl<S: Storage> FsPacker<S> {
 impl<S: Storage> DirVisitor<S> for FsPacker<S> {
     fn visit_dir(
         &mut self,
-        _prefix: &str,
+        path: &str,
         _fd: u32,
-        _preopened_id: (S::NodeId, S::LinkId),
+        preopened_id: (S::NodeId, S::LinkId),
     ) -> Result<(), u16> {
+        self.fs
+            .create_dir(preopened_id.0, preopened_id.1, path)
+            .unwrap();
         Ok(())
     }
 
