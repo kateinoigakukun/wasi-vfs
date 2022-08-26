@@ -177,15 +177,37 @@ impl<S: Storage> EmbeddedFs<S> {
         Some(&self.preopened_dirs[vfd].path)
     }
 
+    pub(crate) fn create_dir(
+        &mut self,
+        dir_node: S::NodeId,
+        dir_link: S::LinkId,
+        relpath: &str,
+    ) -> Result<(), u16> {
+        let (cursor, filename) = self.create_intermediate_dirs(dir_node, dir_link, relpath)?;
+        self.storage.new_dir(cursor, filename.to_string());
+        Ok(())
+    }
+
     pub(crate) fn create_file(
         &mut self,
         dir_node: S::NodeId,
         dir_link: S::LinkId,
-        mut relpath: &str,
+        relpath: &str,
         content: Vec<u8>,
     ) -> Result<(), u16> {
-        let mut cursor = match self.storage.get_inode(&dir_node) {
-            Node::Dir { .. } => (dir_node, dir_link),
+        let (cursor, filename) = self.create_intermediate_dirs(dir_node, dir_link, relpath)?;
+        self.storage.new_file(cursor, filename.to_string(), content);
+        Ok(())
+    }
+
+    fn create_intermediate_dirs<'path>(
+        &mut self,
+        base_node: S::NodeId,
+        base_link: S::LinkId,
+        mut relpath: &'path str,
+    ) -> Result<((S::NodeId, S::LinkId), &'path str), u16> {
+        let mut cursor = match self.storage.get_inode(&base_node) {
+            Node::Dir { .. } => (base_node, base_link),
             _ => return Err(wasi::ERRNO_BADF.raw()),
         };
         if relpath.starts_with('/') {
@@ -198,6 +220,7 @@ impl<S: Storage> EmbeddedFs<S> {
         };
 
         let components_len = components.len();
+
         'find_parent_node: for component in components.into_iter().take(components_len - 1) {
             if component == "." {
                 continue;
@@ -218,10 +241,7 @@ impl<S: Storage> EmbeddedFs<S> {
                 cursor = (new_dir_id, new_link_id);
             }
         }
-
-        self.storage.new_file(cursor, filename.to_string(), content);
-
-        Ok(())
+        Ok(((cursor.0, cursor.1), filename))
     }
 
     pub(crate) fn get_node_id_by_link(&self, id: S::LinkId) -> S::NodeId {
