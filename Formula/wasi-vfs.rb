@@ -1,7 +1,7 @@
 class WasiVfs < Formula
   desc "A virtual filesystem layer for WASI."
   homepage "https://github.com/kateinoigakukun/wasi-vfs"
-  url "https://github.com/kateinoigakukun/wasi-vfs.git", tag: "v0.1.1", using: :git
+  url "https://github.com/kateinoigakukun/wasi-vfs.git", tag: "v0.2.0", using: :git
   head "https://github.com/kateinoigakukun/wasi-vfs.git", branch: "main"
   license "MIT"
 
