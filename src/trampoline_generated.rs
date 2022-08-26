@@ -597,8 +597,13 @@ pub unsafe extern "C" fn wasi_vfs_fd_write(arg0: i32, arg1: i32, arg2: i32, arg3
 pub unsafe extern "C" fn wasi_vfs_path_create_directory(arg0: i32, arg1: i32, arg2: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!(
-        "path_create_directory(fd: {}, path: {}, path_len: {})\n",
-        arg0, arg1, arg2
+        "path_create_directory(fd: {}, path: {})\n",
+        arg0,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        }
     ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
@@ -630,8 +635,14 @@ pub unsafe extern "C" fn wasi_vfs_path_filestat_get(
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!(
-        "path_filestat_get(fd: {}, flags: {}, path: {}, path_len: {})\n",
-        arg0, arg1, arg2, arg3
+        "path_filestat_get(fd: {}, flags: {}, path: {})\n",
+        arg0,
+        arg1,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg2 as *const u8, (arg3 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        }
     ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
@@ -672,7 +683,19 @@ pub unsafe extern "C" fn wasi_vfs_path_filestat_set_times(
     arg6: i32,
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
-crate::trace::trace_syscall_entry(format_args!("path_filestat_set_times(fd: {}, flags: {}, path: {}, path_len: {}, atim: {}, mtim: {}, fst_flags: {})\n", arg0, arg1, arg2, arg3, arg4, arg5, arg6));
+    crate::trace::trace_syscall_entry(format_args!(
+        "path_filestat_set_times(fd: {}, flags: {}, path: {}, atim: {}, mtim: {}, fst_flags: {})\n",
+        arg0,
+        arg1,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg2 as *const u8, (arg3 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        },
+        arg4,
+        arg5,
+        arg6
+    ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
     } else {
@@ -714,7 +737,22 @@ pub unsafe extern "C" fn wasi_vfs_path_link(
     arg6: i32,
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
-crate::trace::trace_syscall_entry(format_args!("path_link(old_fd: {}, old_flags: {}, old_path: {}, old_path_len: {}, new_fd: {}, new_path: {}, new_path_len: {})\n", arg0, arg1, arg2, arg3, arg4, arg5, arg6));
+    crate::trace::trace_syscall_entry(format_args!(
+        "path_link(old_fd: {}, old_flags: {}, old_path: {}, new_fd: {}, new_path: {})\n",
+        arg0,
+        arg1,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg2 as *const u8, (arg3 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        },
+        arg4,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg5 as *const u8, (arg6 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        }
+    ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
     } else {
@@ -758,7 +796,11 @@ pub unsafe extern "C" fn wasi_vfs_path_open(
     arg8: i32,
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
-crate::trace::trace_syscall_entry(format_args!("path_open(fd: {}, dirflags: {}, path: {}, path_len: {}, oflags: {}, fs_rights_base: {}, fs_rights_inheriting: {}, fdflags: {})\n", arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7));
+crate::trace::trace_syscall_entry(format_args!("path_open(fd: {}, dirflags: {}, path: {}, oflags: {}, fs_rights_base: {}, fs_rights_inheriting: {}, fdflags: {})\n", arg0, arg1, {
+                            let str_bytes = core::slice::from_raw_parts(arg2 as *const u8, (arg3 + 1) as usize);
+                            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+                            cstr.to_str().unwrap().to_string()
+                        }, arg4, arg5, arg6, arg7));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
     } else {
@@ -804,8 +846,15 @@ pub unsafe extern "C" fn wasi_vfs_path_readlink(
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!(
-        "path_readlink(fd: {}, path: {}, path_len: {}, buf: {}, buf_len: {})\n",
-        arg0, arg1, arg2, arg3, arg4
+        "path_readlink(fd: {}, path: {}, buf: {}, buf_len: {})\n",
+        arg0,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        },
+        arg3,
+        arg4
     ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
@@ -840,8 +889,13 @@ pub unsafe extern "C" fn wasi_vfs_path_readlink(
 pub unsafe extern "C" fn wasi_vfs_path_remove_directory(arg0: i32, arg1: i32, arg2: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!(
-        "path_remove_directory(fd: {}, path: {}, path_len: {})\n",
-        arg0, arg1, arg2
+        "path_remove_directory(fd: {}, path: {})\n",
+        arg0,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        }
     ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
@@ -873,7 +927,21 @@ pub unsafe extern "C" fn wasi_vfs_path_rename(
     arg5: i32,
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
-crate::trace::trace_syscall_entry(format_args!("path_rename(fd: {}, old_path: {}, old_path_len: {}, new_fd: {}, new_path: {}, new_path_len: {})\n", arg0, arg1, arg2, arg3, arg4, arg5));
+    crate::trace::trace_syscall_entry(format_args!(
+        "path_rename(fd: {}, old_path: {}, new_fd: {}, new_path: {})\n",
+        arg0,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        },
+        arg3,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg4 as *const u8, (arg5 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        }
+    ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
     } else {
@@ -913,8 +981,18 @@ pub unsafe extern "C" fn wasi_vfs_path_symlink(
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!(
-        "path_symlink(old_path: {}, old_path_len: {}, fd: {}, new_path: {}, new_path_len: {})\n",
-        arg0, arg1, arg2, arg3, arg4
+        "path_symlink(old_path: {}, fd: {}, new_path: {})\n",
+        {
+            let str_bytes = core::slice::from_raw_parts(arg0 as *const u8, (arg1 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        },
+        arg2,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg3 as *const u8, (arg4 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        }
     ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
@@ -948,8 +1026,13 @@ pub unsafe extern "C" fn wasi_vfs_path_symlink(
 pub unsafe extern "C" fn wasi_vfs_path_unlink_file(arg0: i32, arg1: i32, arg2: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!(
-        "path_unlink_file(fd: {}, path: {}, path_len: {})\n",
-        arg0, arg1, arg2
+        "path_unlink_file(fd: {}, path: {})\n",
+        arg0,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        }
     ));
     let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() {
         fs
