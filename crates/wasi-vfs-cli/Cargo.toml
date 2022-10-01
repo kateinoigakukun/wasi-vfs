@@ -9,4 +9,4 @@ name = "wasi-vfs"
 [dependencies]
 anyhow = "1.0.40"
 structopt = "0.3.21"
-wizer = { git = "https://github.com/bytecodealliance/wizer.git", rev = "1802237aeb8c19ff9448d67d280935bc10110d32" }
+wizer = { git = "https://github.com/bytecodealliance/wizer.git", rev = "65e345fb2bd5b5177d4be55af747edc28035c35c" }
