@@ -9,14 +9,14 @@
 
 int main(int argc, char *argv[]) {
   int usr_local = open("/usr/local/bin", O_RDONLY, O_DIRECTORY);
-  perror("usr_local");
+  if (usr_local == -1) perror("usr_local");
   assert(usr_local != -1);
   // int yay = openat(usr_local, "./yay", O_RDONLY, 0);
   // perror("yay");
   // assert(yay != -1);
   check_access("/usr/local/bin/../hey");
   int hey = openat(usr_local, "../hey", O_RDONLY, 0);
-  perror("hey");
+  if (hey == -1) perror("hey");
   assert(hey != -1);
   return 0;
 }

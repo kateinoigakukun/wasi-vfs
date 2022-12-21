@@ -1,5 +1,5 @@
 CC = $(WASI_SDK_PATH)/bin/clang
-WASI_VFS_CLI = cargo run -p wasi-vfs-cli --
+WASI_VFS_CLI = cargo run --quiet -p wasi-vfs-cli --
 WASI_RUN = wasmtime
 NODE = node
 

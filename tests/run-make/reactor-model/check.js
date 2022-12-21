@@ -12,6 +12,5 @@ const i = new WebAssembly.Instance(m, {
   wasi_snapshot_preview1: wasi.wasiImport,
 });
 
-console.log(i.exports)
 wasi.initialize(i);
 i.exports.check();

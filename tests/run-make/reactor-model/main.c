@@ -4,7 +4,6 @@
 #pragma clang diagnostic ignored "-Wunknown-attributes"
 __attribute__((export_name("check")))
 void check(void) {
-  printf("checking\n");
   check_file_exists("/hello.txt");
   check_dir_entry_size("/", 1);
 }
