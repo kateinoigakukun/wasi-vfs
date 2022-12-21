@@ -11,5 +11,5 @@ generate-trampoline:
 build:
 	cargo build --target wasm32-unknown-unknown
 
-check: $(LIB_WASI_VFS_A)
+check: build
 	env LIB_WASI_VFS_A=$(LIB_WASI_VFS_A) ./tools/run-make-test.sh
