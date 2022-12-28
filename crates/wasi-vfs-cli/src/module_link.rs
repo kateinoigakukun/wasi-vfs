@@ -1,4 +1,4 @@
-/// Given thse two modules:
+/// Given these two modules:
 ///
 /// libwasi_vfs.wasm
 /// ```webassembly
