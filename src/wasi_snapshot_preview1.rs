@@ -25,7 +25,7 @@ pub(crate) unsafe fn fd_advise<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::fd_advise(
                 fd as i32,
@@ -49,7 +49,7 @@ pub(crate) unsafe fn fd_allocate<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret =
                 wasi::wasi_snapshot_preview1::fd_allocate(fd as i32, offset as i64, len as i64);
@@ -81,7 +81,7 @@ pub(crate) unsafe fn fd_datasync<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::fd_datasync(fd as i32);
             match ret {
@@ -149,7 +149,7 @@ pub(crate) unsafe fn fd_fdstat_set_rights<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::fd_fdstat_set_rights(
                 fd as i32,
@@ -193,7 +193,7 @@ pub(crate) unsafe fn fd_filestat_set_size<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::fd_filestat_set_size(fd as i32, size as i64);
             match ret {
@@ -213,7 +213,7 @@ pub(crate) unsafe fn fd_filestat_set_times<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::fd_filestat_set_times(
                 fd as i32,
@@ -237,7 +237,7 @@ pub(crate) unsafe fn fd_pread<S: Storage>(
 ) -> Result<Size, Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let mut rp0 = MaybeUninit::<Size>::uninit();
             let ret = wasi::wasi_snapshot_preview1::fd_pread(
@@ -329,7 +329,7 @@ pub(crate) unsafe fn fd_pwrite<S: Storage>(
 ) -> Result<Size, Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let mut rp0 = MaybeUninit::<Size>::uninit();
             let ret = wasi::wasi_snapshot_preview1::fd_pwrite(
@@ -476,7 +476,7 @@ pub(crate) unsafe fn fd_renumber<S: Storage>(
                 _ => Err(Error(ret as u16)),
             }
         }
-        (_, _) => todo!(),
+        (_, _) => Err(wasi::ERRNO_NOTSUP.into()),
     }
 }
 
@@ -551,7 +551,7 @@ pub(crate) unsafe fn fd_seek<S: Storage>(
 pub(crate) unsafe fn fd_sync<S: Storage>(fs: &mut FileSystem<S>, fd: UserFd) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::fd_sync(fd as i32);
             match ret {
@@ -591,7 +591,7 @@ pub(crate) unsafe fn fd_write<S: Storage>(
 ) -> Result<Size, Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let mut rp0 = MaybeUninit::<Size>::uninit();
             let ret = wasi::wasi_snapshot_preview1::fd_write(
@@ -615,7 +615,7 @@ pub(crate) unsafe fn path_create_directory<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::path_create_directory(
                 fd as i32,
@@ -670,7 +670,7 @@ pub(crate) unsafe fn path_filestat_set_times<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::path_filestat_set_times(
                 fd as i32,
@@ -715,7 +715,7 @@ pub(crate) unsafe fn path_link<S: Storage>(
                 _ => Err(Error(ret as u16)),
             }
         }
-        (_, _) => todo!(),
+        (_, _) => Err(wasi::ERRNO_NOTSUP.into()),
     }
 }
 
@@ -795,7 +795,7 @@ pub(crate) unsafe fn path_remove_directory<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::path_remove_directory(
                 fd as i32,
@@ -834,7 +834,7 @@ pub(crate) unsafe fn path_rename<S: Storage>(
                 _ => Err(Error(ret as u16)),
             }
         }
-        (_, _) => todo!(),
+        (_, _) => Err(wasi::ERRNO_NOTSUP.into()),
     }
 }
 
@@ -846,7 +846,7 @@ pub(crate) unsafe fn path_symlink<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::path_symlink(
                 old_path.as_ptr() as i32,
@@ -870,7 +870,7 @@ pub(crate) unsafe fn path_unlink_file<S: Storage>(
 ) -> Result<(), Error> {
     let fd = fs.get_backing_fd(fd)?;
     match fd {
-        BackingFd::Virtual(vfd) => todo!(),
+        BackingFd::Virtual(vfd) => Err(wasi::ERRNO_NOTSUP.into()),
         BackingFd::Wasi(fd) => {
             let ret = wasi::wasi_snapshot_preview1::path_unlink_file(
                 fd as i32,
