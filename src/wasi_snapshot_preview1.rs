@@ -7,8 +7,7 @@ use std::{
 use wasi::{
     CiovecArray, Dircookie, Event, Fd, Fdflags, Fdstat, Filedelta, Filesize, Filestat, Fstflags,
     IovecArray, Lookupflags, Oflags, Prestat, PrestatDir, PrestatU, Rights, Size, Subscription,
-    Timestamp, RIGHTS_FD_ADVISE, RIGHTS_FD_FILESTAT_GET, RIGHTS_FD_READ, RIGHTS_FD_READDIR,
-    RIGHTS_PATH_OPEN,
+    Timestamp
 };
 
 use crate::{
@@ -97,11 +96,6 @@ pub(crate) unsafe fn fd_fdstat_get<S: Storage>(
     fd: UserFd,
 ) -> Result<Fdstat, Error> {
     let fd = fs.get_backing_fd(fd)?;
-    let ro_rights = RIGHTS_FD_READ
-        | RIGHTS_FD_ADVISE
-        | RIGHTS_PATH_OPEN
-        | RIGHTS_FD_READDIR
-        | RIGHTS_FD_FILESTAT_GET;
     match fd {
         BackingFd::Virtual(vfd) => {
             let stat = fs.embedded_fs.get_fd_stat(vfd)?;
