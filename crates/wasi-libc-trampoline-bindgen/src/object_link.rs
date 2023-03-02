@@ -96,7 +96,7 @@ fn render_module(module: &Module, variant: AbiVariant, src: &mut String) {
         render_libc_hook_point(
             &*f,
             &abi_name,
-            &format!("wasi_vfs_{}", f_name.to_snake_case()),
+            &format!("wasi_vfs_{}_{}", module.name.as_str().to_snake_case(), f_name.to_snake_case()),
             src,
         );
         src.push('\n');

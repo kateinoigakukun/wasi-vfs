@@ -160,7 +160,7 @@ impl Render for Module {
 
             render_trampoline(
                 &*f,
-                &format!("wasi_vfs_{}", f_name.to_snake_case()),
+                &format!("wasi_vfs_{}_{}", self.name.as_str(), f_name.to_snake_case()),
                 &self.name,
                 src,
             );
