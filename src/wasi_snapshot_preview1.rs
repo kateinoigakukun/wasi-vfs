@@ -1,3 +1,10 @@
+/// In this module, we can't use WASI wrappers provided by `wasi` crate
+/// because some types used in their parameters are defined as structs and
+/// their constructor is private. It wouldn't be a problem if the parameters
+/// are derived only from constant definitions (like `CLOCKID_MONOTONIC`), but
+/// we need to map given raw integers to the struct types. So we can't use those
+/// wrapper until they will provide public interface to make them from raw integers.
+
 use core::slice;
 use std::{
     ffi::{CStr, OsStr},
