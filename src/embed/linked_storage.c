@@ -12,6 +12,53 @@ typedef uint16_t wasi_errno_t;
 
 struct wasi_vfs_embed_linked_storage {};
 
+/*
+
+# Data structure example
+
+Consider the following case:
+  /a
+    ./b_file
+    ./c_dir
+      ./symlink_a  -> [symbolic link to /a]
+      ./hardlink_a -> [hard link to /a]
+
+
+           |-> NULL
+           |
+           |         |----------------------------------------------|
+           |         |                                              |
+           |         |                            |-----------------|-----|
+           |         v                            v                 |     |
+           |   |--------|            |-----dir node A-----|         |     |
+           --- | link A | --[node]-> | - name: "c_dir"    |         |     |
+           |-> |--------|            |   link: link C     | -----|  |     |
+           |                         | - name: "b_file"   |      |  |     |
+           |                         |   link: link B     | --|  |  |     |
+        [parent]                     |--------------------|   |  |  |     |
+           |                                                  |  |  |     |
+           |         |----------------------------------------|  |  |     |
+           |         v                                           |  |     |
+           |   |--------|            |-------------|             |  |     |
+           |-- | link B | --[node]-> | file node B |             |  |     |
+           |   |--------|            |-------------|             |  |     |
+           |                                                     |  |     |
+           |         |-------------------------------------------|  |     |
+           |         v                                              |     |
+           |   |--------|            |-----dir node C-------|       |     |
+           --- | link C | --[node]-> | - name: "symlink_a"  |       |     |
+           |-> |--------|            |   link: link A       | ------|     |
+           |                         | - name: "hardlink_a" |             |
+           |                         |   link: link D       | ------|     |
+           |                         |----------------------|       |     |
+        [parent]                                                    |     |
+           |         |----------------------------------------------|     |
+           |         v                                                    |
+           |   |--------|                                                 |
+           |-- | link D | --[node]----------------------------------------|
+               |--------|
+*/
+
 struct wasi_vfs_node;
 struct wasi_vfs_link {
   struct wasi_vfs_link *parent;
