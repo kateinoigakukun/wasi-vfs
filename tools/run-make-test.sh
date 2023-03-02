@@ -7,15 +7,15 @@ TESTS_DIR="$(dirname "$TOOLS_DIR")/tests/run-make"
 TMPDIR_BASE="$(mktemp -d)"
 
 tests=$(ls -1F "$TESTS_DIR" | grep /)
-tests_count="$(echo "$tests" | wc -l)"
-tests_count_width="$(printf $tests_count | wc -c)"
+tests_count="$(echo "$tests" | wc -l | awk '{ print $1 }')"
+tests_count_width="$(printf $tests_count | wc -c | awk '{ print $1 }')"
 tests_index=1
 
 fail=0
 
 while IFS= read -r test; do
   testdir="$TESTS_DIR/$test"
-  printf "[%"$tests_count_width"s/%"$tests_count_width"s] Running $test " "$tests_index" "$tests_count"
+  printf "[%${tests_count_width}s/%${tests_count_width}s] Running $test " "$tests_index" "$tests_count"
   set +e
   (
     cd "$testdir" && \
