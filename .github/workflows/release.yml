@@ -23,10 +23,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
       - uses: actions-rs/cargo@v1.0.1
         with:
           command: build
@@ -45,10 +41,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
       - name: Install wasi-sdk
         run: |
           set -e
