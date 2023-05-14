@@ -101,21 +101,21 @@ static mut GLOBAL_STATE: GlobalState<DefaultStorage> = GlobalState {
 // loads envirnoment variables and preopened directories. `getenv` is not available at this
 // time, so use self-made `env_var` instead.
 fn env_var(name: &str) -> Option<String> {
-    let (count, buffer_size) = unsafe { wasi::environ_sizes_get().unwrap() };
+    let (count, buffer_size) = unsafe { wasi::environ_sizes_get().ok()? };
     if count == 0 {
         return None;
     }
     let mut offsets: Vec<*mut u8> = vec![std::ptr::null_mut(); count];
     let mut buffer: Vec<u8> = vec![0; buffer_size];
     unsafe {
-        wasi::environ_get(offsets.as_mut_ptr(), buffer.as_mut_ptr()).unwrap();
-    }
+        wasi::environ_get(offsets.as_mut_ptr(), buffer.as_mut_ptr()).ok()?;
+    };
     for offset in offsets {
         let c_str = unsafe { CStr::from_ptr(offset as *const i8) };
         let pair = c_str.to_string_lossy();
         let mut pair = pair.splitn(2, '=');
-        let key = pair.next().unwrap();
-        let value = pair.next().unwrap();
+        let key = pair.next()?;
+        let value = pair.next()?;
         if key == name {
             return Some(value.to_string());
         }
