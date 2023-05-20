@@ -3,7 +3,7 @@ class WasiVfs < Formula
   homepage "https://github.com/kateinoigakukun/wasi-vfs"
   url "https://github.com/kateinoigakukun/wasi-vfs.git", tag: "v0.2.0", using: :git
   head "https://github.com/kateinoigakukun/wasi-vfs.git", branch: "main"
-  license "MIT"
+  license "Apache-2.0" => { with: "LLVM-exception" }
 
   depends_on "rust" => :build
 
