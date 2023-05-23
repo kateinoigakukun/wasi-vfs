@@ -891,7 +891,49 @@ pub(crate) unsafe fn poll_oneoff<S: Storage>(
     out: *mut Event,
     nsubscriptions: u32,
 ) -> Result<Size, Error> {
-    Err(wasi::ERRNO_NOTSUP.into())
+    let in_ = slice::from_raw_parts(in_, nsubscriptions as usize);
+    let mut new_in = Vec::<Subscription>::new();
+    for sub in in_ {
+        match sub.u.tag {
+        0 /* EVENTTYPE_CLOCK */ => {
+            new_in.push(*sub);
+        }
+        1 | 2 /* EVENTTYPE_FD_READ | EVENTTYPE_FD_WRITE */ => {
+            let mut new_sub = *sub;
+            let fd = if sub.u.tag == 1 {
+                sub.u.u.fd_read.file_descriptor
+            } else {
+                sub.u.u.fd_write.file_descriptor
+            };
+            let fd = fs.get_backing_fd(fd)?;
+            let new_fd = match fd {
+                BackingFd::Virtual(_) => return Err(wasi::ERRNO_NOTSUP.into()),
+                BackingFd::Wasi(fd) => fd,
+            };
+
+            if sub.u.tag == 1 {
+                new_sub.u.u.fd_read.file_descriptor = new_fd;
+            } else {
+                new_sub.u.u.fd_write.file_descriptor = new_fd;
+            }
+
+            new_in.push(new_sub);
+        }
+        _ => return Err(wasi::ERRNO_INVAL.into()),
+        }
+    }
+    let mut rp0 = MaybeUninit::<Fdstat>::uninit();
+    let ret = wasi::wasi_snapshot_preview1::poll_oneoff(
+        new_in.as_ptr() as i32,
+        out as i32,
+        nsubscriptions as i32,
+        rp0.as_mut_ptr() as i32,
+    );
+
+    match ret {
+        0 => Ok(core::ptr::read(rp0.as_mut_ptr() as i32 as *const Size)),
+        _ => Err(Error(ret as u16)),
+    }
 }
 
 fn read_bytes<R: std::io::Read>(mut src: R, iovs: wasi::IovecArray) -> Result<usize, wasi::Errno> {
