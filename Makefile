@@ -1,5 +1,6 @@
 TRAMPOLINE_GEN = WASI_REPO=./crates/wasi-libc-trampoline-bindgen/WASI cargo run --package wasi-libc-trampoline-bindgen --
 LIB_WASI_VFS_A = target/wasm32-unknown-unknown/debug/libwasi_vfs.a
+.DEFAULT_GOAL = build
 
 .PHONY: generate-trampoline build check
 
