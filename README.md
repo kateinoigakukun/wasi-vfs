@@ -52,12 +52,12 @@ $ brew install kateinoigakukun/wasi-vfs/wasi-vfs
 
 ## Building
 
-To build the project, you need to install the [`wasi-sdk`](https://github.com/WebAssembly/wasi-sdk) version 14.0 or later.
+To build the project, you need to install the [`wasi-sdk`](https://github.com/WebAssembly/wasi-sdk) version 16.0 or later.
 
 ```console
 $ git clone https://github.com/kateinoigakukun/wasi-vfs.git --recurse-submodules
 $ cd wasi-vfs
-$ export WASI_VERSION=14
+$ export WASI_VERSION=16
 $ export WASI_VERSION_FULL=${WASI_VERSION}.0
 
 # For x86_64 Linux host machine
