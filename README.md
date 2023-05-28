@@ -57,7 +57,7 @@ To build the project, you need to install the [`wasi-sdk`](https://github.com/We
 ```console
 $ git clone https://github.com/kateinoigakukun/wasi-vfs.git --recurse-submodules
 $ cd wasi-vfs
-$ export WASI_VERSION=16
+$ export WASI_VERSION=20
 $ export WASI_VERSION_FULL=${WASI_VERSION}.0
 
 # For x86_64 Linux host machine
