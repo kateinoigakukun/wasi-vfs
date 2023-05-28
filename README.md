@@ -24,7 +24,7 @@ This project provides a language and host-agnostic virtual filesystem layer for 
 A typical installation from the release binaries might look like the following:
 
 ```console
-$ export WASI_VFS_VERSION=0.3.0
+$ export WASI_VFS_VERSION=0.4.0
 
 # For x86_64 Linux host machine
 $ curl -LO "https://github.com/kateinoigakukun/wasi-vfs/releases/download/v${WASI_VFS_VERSION}/wasi-vfs-cli-x86_64-unknown-linux-gnu.zip"
