@@ -1,11 +1,15 @@
 const { WASI } = require("wasi");
 const fs = require("fs");
 const process = require("process");
+const path = require("path");
 
 const buffer = fs.readFileSync(process.argv[2]);
 
 const wasi = new WASI({
   env: { ...process.env },
+  preopens: {
+    "/run": path.join(__dirname, "mnt", "run"),
+  }
 });
 const m = new WebAssembly.Module(buffer);
 const i = new WebAssembly.Instance(m, {
