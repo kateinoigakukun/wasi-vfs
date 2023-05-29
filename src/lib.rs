@@ -10,7 +10,7 @@ mod wasi_snapshot_preview1;
 use embed::LinkedStorage as DefaultStorage;
 use embed::{EmbeddedFs, NodeIdTrait, Storage};
 
-use std::{collections::HashMap, ffi::CStr};
+use std::{collections::HashMap, ffi::{CStr, CString}};
 use wasi::Fd;
 
 /// User-facing file descriptor managed by wasi-vfs
@@ -48,23 +48,45 @@ impl<S: Storage> FileSystem<S> {
             fs.set_user_fd_at(BackingFd::Wasi(fd), fd);
         }
 
+        extern "C" {
+            fn __wasilibc_register_preopened_fd(fd: i32, name: *const u8) -> i32;
+        }
+
         for fd in 3.. {
             unsafe {
-                match wasi::fd_prestat_get(fd) {
-                    Ok(_) => (),
+                let prestat = match wasi::fd_prestat_get(fd) {
+                    Ok(prestat) => prestat,
                     Err(wasi::ERRNO_BADF) => break,
                     Err(other) => {
                         panic!("failed to get prestat: {}", other);
                     }
-                }
-            }
+                };
 
+                let mut prefix = Vec::with_capacity(prestat.u.dir.pr_name_len + 1);
+                match wasi::fd_prestat_dir_name(fd, prefix.as_mut_ptr(), prestat.u.dir.pr_name_len) {
+                    Ok(_) => {
+                        prefix.set_len(prestat.u.dir.pr_name_len + 1);
+                        prefix[prestat.u.dir.pr_name_len] = 0;
+                    },
+                    Err(other) => {
+                        panic!("failed to get prestat dir name: {}", other);
+                    }
+                }
+                __wasilibc_register_preopened_fd(fd as i32, prefix.as_ptr());
+            }
             fs.issue_user_fd(BackingFd::Wasi(fd));
         }
         for vfd in preopened_vfds {
+            let vfd = *vfd;
             let fd = fs.next_fd;
             fs.next_fd += 1;
-            fs.fd_map.insert(fd, BackingFd::Virtual(*vfd));
+            fs.fd_map.insert(fd, BackingFd::Virtual(vfd));
+            if let Some(prefix) = fs.embedded_fs.get_preopened_dir_path(vfd) {
+                let prefix = CString::new(prefix).unwrap();
+                unsafe {
+                    __wasilibc_register_preopened_fd(fd as i32, prefix.as_ptr() as *const u8);
+                }
+            }
         }
         fs
     }
