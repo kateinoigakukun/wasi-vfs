@@ -145,30 +145,25 @@ fn env_var(name: &str) -> Option<String> {
     None
 }
 
-fn get_or_create_overlay_fs() -> Option<&'static mut FileSystem<DefaultStorage>> {
-    if env_var("__WASI_VFS_PACKING").is_some() {
-        return None;
+/// Runtime entry point to initialize the virtual file system.
+#[no_mangle]
+unsafe extern "C" fn __internal_wasi_vfs_rt_init() {
+    extern "C" {
+        fn __wasi_vfs_force_link_init();
     }
-    unsafe {
-        if let Some(fs) = &mut GLOBAL_STATE.overlay_fs {
-            Some(fs)
-        } else {
-            let (embedded_fs, preopened_vfds) = GLOBAL_STATE.embedded_fs.take()?;
-            let fs = FileSystem::create(embedded_fs, &preopened_vfds);
-            GLOBAL_STATE.overlay_fs = Some(fs);
-            GLOBAL_STATE.overlay_fs.as_mut()
-        }
+    __wasi_vfs_force_link_init();
+    if env_var("__WASI_VFS_PACKING").is_some() {
+        return;
+    }
+    if let Some((embedded_fs, preopened_vfds)) = GLOBAL_STATE.embedded_fs.take() {
+        let fs = FileSystem::create(embedded_fs, &preopened_vfds);
+        GLOBAL_STATE.overlay_fs = Some(fs);
     }
 }
 
 /// Packing-time entry point to scan the host file system.
 #[no_mangle]
 unsafe extern "C" fn __internal_wasi_vfs_pack_fs() {
-    extern "C" {
-        fn __wasi_vfs_force_link_init();
-    }
-    __wasi_vfs_force_link_init();
-
     std::panic::set_hook(Box::new(|info| {
         trace::print(format!("{}\n", info));
     }));
