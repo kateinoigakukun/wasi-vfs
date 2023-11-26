@@ -251,7 +251,7 @@ fn render_trampoline(func: &InterfaceFunc, name: &str, module: &Id, src: &mut St
     }
     {
         src.push_str(
-            "let fs = if let Some(fs) = crate::get_or_create_overlay_fs() { fs } else {\n",
+            "let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() { fs } else {\n",
         );
         src.push_str(&format!(
             "return wasi::{}::{}(\n",
