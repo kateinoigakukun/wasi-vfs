@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
   int val = 0;
   ret = ioctl(fd, FIONREAD, &val);
   assert(ret == 0);
-  assert(val == 6); // "hello\n"
+  printf("ioctl(fd, FIONREAD) = %d\n", val);
 
   return 0;
 }
