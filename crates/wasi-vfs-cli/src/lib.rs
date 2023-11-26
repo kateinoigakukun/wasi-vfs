@@ -63,10 +63,40 @@ impl App {
                     wizer.map_dir(guest_dir, host_dir);
                 }
                 let wasm_bytes = std::fs::read(&input)?;
+                if is_wasi_reactor(&wasm_bytes) {
+                    wizer.func_rename("_initialize", "__wasi_vfs_rt_init");
+                }
                 let output_bytes = wizer.run(&wasm_bytes)?;
                 std::fs::write(output, output_bytes)?;
             }
         }
         Ok(())
     }
+}
+
+fn is_wasi_reactor(bytes: &[u8]) -> bool {
+    let parser = wasmparser::Parser::new(0);
+    for payload in parser.parse_all(bytes) {
+        let payload = match payload {
+            Ok(payload) => payload,
+            Err(_) => continue,
+        };
+        match payload {
+            wasmparser::Payload::ExportSection(export) => {
+                for entry in export {
+                    let entry = match entry {
+                        Ok(entry) => entry,
+                        Err(_) => continue,
+                    };
+                    if entry.name == "_initialize" {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            wasmparser::Payload::End(_) => return false,
+            _ => continue
+        }
+    }
+    false
 }

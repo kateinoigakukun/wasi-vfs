@@ -9,10 +9,18 @@ void export_wasi_vfs_pack_fs(void) {
   __internal_wasi_vfs_pack_fs();
 }
 
-// wasi-libc reserves 50~100 constructor, and __wasilibc_populate_preopens calls
-// fs syscall, so this need to be done before that.
-__attribute__((constructor(40)))
+__attribute__((export_name("__wasi_vfs_rt_init")))
 void __wasi_vfs_rt_init(void) {
   extern void __internal_wasi_vfs_rt_init(void);
   __internal_wasi_vfs_rt_init();
+}
+
+// wasi-libc reserves 50~100 constructor, and __wasilibc_populate_preopens calls
+// fs syscall, so this need to be done before that.
+__attribute__((constructor(40)))
+void __wasi_vfs_rt_init_ctor(void) {
+    __attribute__((weak)) extern void _start(void);
+    if (_start) {
+        __wasi_vfs_rt_init();
+    }
 }
