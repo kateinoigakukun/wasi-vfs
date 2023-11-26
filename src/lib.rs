@@ -10,7 +10,10 @@ mod wasi_snapshot_preview1;
 use embed::LinkedStorage as DefaultStorage;
 use embed::{EmbeddedFs, NodeIdTrait, Storage};
 
-use std::{collections::HashMap, ffi::{CStr, CString}};
+use std::{
+    collections::HashMap,
+    ffi::{CStr, CString},
+};
 use wasi::Fd;
 
 /// User-facing file descriptor managed by wasi-vfs
@@ -63,11 +66,12 @@ impl<S: Storage> FileSystem<S> {
                 };
 
                 let mut prefix = Vec::with_capacity(prestat.u.dir.pr_name_len + 1);
-                match wasi::fd_prestat_dir_name(fd, prefix.as_mut_ptr(), prestat.u.dir.pr_name_len) {
+                match wasi::fd_prestat_dir_name(fd, prefix.as_mut_ptr(), prestat.u.dir.pr_name_len)
+                {
                     Ok(_) => {
                         prefix.set_len(prestat.u.dir.pr_name_len + 1);
                         prefix[prestat.u.dir.pr_name_len] = 0;
-                    },
+                    }
                     Err(other) => {
                         panic!("failed to get prestat dir name: {}", other);
                     }

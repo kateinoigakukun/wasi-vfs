@@ -95,7 +95,7 @@ fn is_wasi_reactor(bytes: &[u8]) -> bool {
                 return false;
             }
             wasmparser::Payload::End(_) => return false,
-            _ => continue
+            _ => continue,
         }
     }
     false
