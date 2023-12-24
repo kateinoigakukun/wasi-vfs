@@ -51,27 +51,32 @@ impl App {
                 map_dirs,
                 output,
             } => {
-                std::env::set_var("__WASI_VFS_PACKING", "1");
-                let mut wizer = wizer::Wizer::new();
-                wizer.allow_wasi(true)?;
-                wizer.init_func("wasi_vfs_pack_fs");
-                wizer.inherit_stdio(true);
-                wizer.inherit_env(true);
-                wizer.keep_init_func(true);
-                wizer.wasm_bulk_memory(true);
-                for (guest_dir, host_dir) in map_dirs {
-                    wizer.map_dir(guest_dir, host_dir);
-                }
                 let wasm_bytes = std::fs::read(&input)?;
-                if is_wasi_reactor(&wasm_bytes) {
-                    wizer.func_rename("_initialize", "__wasi_vfs_rt_init");
-                }
-                let output_bytes = wizer.run(&wasm_bytes)?;
+                let output_bytes = pack(&wasm_bytes, map_dirs)?;
                 std::fs::write(output, output_bytes)?;
             }
         }
         Ok(())
     }
+}
+
+pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(PathBuf, PathBuf)>) -> Result<Vec<u8>> {
+    std::env::set_var("__WASI_VFS_PACKING", "1");
+    let mut wizer = wizer::Wizer::new();
+    wizer.allow_wasi(true)?;
+    wizer.init_func("wasi_vfs_pack_fs");
+    wizer.inherit_stdio(true);
+    wizer.inherit_env(true);
+    wizer.keep_init_func(true);
+    wizer.wasm_bulk_memory(true);
+    for (guest_dir, host_dir) in map_dirs {
+        wizer.map_dir(guest_dir, host_dir);
+    }
+    if is_wasi_reactor(&wasm_bytes) {
+        wizer.func_rename("_initialize", "__wasi_vfs_rt_init");
+    }
+    let output_bytes = wizer.run(&wasm_bytes)?;
+    Ok(output_bytes)
 }
 
 fn is_wasi_reactor(bytes: &[u8]) -> bool {
