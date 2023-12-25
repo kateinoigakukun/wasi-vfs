@@ -8,5 +8,5 @@ edition = "2021"
 [dependencies]
 
 witx = { path = "WASI/tools/witx" }
-heck = "0.3"
+heck = "0.4"
 structopt = "0.3.21"

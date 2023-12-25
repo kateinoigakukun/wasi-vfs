@@ -67,7 +67,7 @@ impl Render for TypeRef {
     fn render(&self, src: &mut String) {
         match self {
             TypeRef::Name(t) => {
-                src.push_str(&t.name.as_str().to_camel_case());
+                src.push_str(&t.name.as_str().to_upper_camel_case());
                 if let Type::List(_) = &**t.type_() {
                     src.push_str("<'_>");
                 }
@@ -494,7 +494,7 @@ impl ToRustIdent for NamedType {
     fn to_rust_ident(&self) -> String {
         let mut buf = String::new();
         let src = &mut buf;
-        src.push_str(&self.name.as_str().to_camel_case());
+        src.push_str(&self.name.as_str().to_upper_camel_case());
         if let Type::List(_) = &**self.type_() {
             src.push_str("<'_>");
         }
@@ -508,7 +508,7 @@ impl ToRustIdent for TypeRef {
         let src = &mut buf;
         match self {
             TypeRef::Name(t) => {
-                src.push_str(&t.name.as_str().to_camel_case());
+                src.push_str(&t.name.as_str().to_upper_camel_case());
                 if let Type::List(_) = &**t.type_() {
                     src.push_str("<'_>");
                 }
