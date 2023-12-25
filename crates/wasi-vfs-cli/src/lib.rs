@@ -33,6 +33,10 @@ pub enum App {
         #[structopt(long = "mapdir", value_name = "GUEST_DIR::HOST_DIR", parse(try_from_str = parse_map_dirs))]
         map_dirs: Vec<(PathBuf, PathBuf)>,
 
+        /// Package a host directory into Wasm module at a guest directory
+        #[structopt(long = "dir", value_name = "HOST_DIR::GUEST_DIR", parse(try_from_str = parse_map_dirs))]
+        dirs: Vec<(PathBuf, PathBuf)>,
+
         /// The file path to write the output Wasm module to.
         #[structopt(long, short, parse(from_os_str))]
         output: PathBuf,
@@ -49,9 +53,17 @@ impl App {
             App::Pack {
                 input,
                 map_dirs,
+                dirs,
                 output,
             } => {
                 let wasm_bytes = std::fs::read(&input)?;
+                if !map_dirs.is_empty() {
+                    eprintln!("warning: --mapdir GUIEST_DIR::HOST_DIR is deprecated, use --dir HOST_DIR::GUEST_DIR instead");
+                }
+
+                let mut map_dirs = map_dirs;
+                map_dirs.extend(dirs.into_iter().map(|(a, b)| (b, a)));
+
                 let output_bytes = pack(&wasm_bytes, map_dirs)?;
                 std::fs::write(output, output_bytes)?;
             }
