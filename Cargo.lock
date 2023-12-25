@@ -2172,8 +2172,9 @@ dependencies = [
 
 [[package]]
 name = "wizer"
-version = "2.0.0"
-source = "git+https://github.com/bytecodealliance/wizer.git?rev=refs/pull/89/head#ad37fb2584eb01e0b72bd04809d39b8bc8335a53"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bdbf85c6302a99e5c9d15655abd804c0e204a278fdb62c1e53a37ba4f3550b8b"
 dependencies = [
  "anyhow",
  "cap-std 0.24.4",

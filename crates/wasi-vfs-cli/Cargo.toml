@@ -10,4 +10,4 @@ name = "wasi-vfs"
 anyhow = "1.0.40"
 structopt = "0.3.21"
 wasmparser = "0.106.0"
-wizer = { git = "https://github.com/bytecodealliance/wizer.git", rev = "refs/pull/89/head" }
+wizer = "3.0.0"
