@@ -1,6 +1,6 @@
 CC = $(WASI_SDK_PATH)/bin/clang
 WASI_VFS_CLI = cargo run --quiet -p wasi-vfs-cli --
-WASI_RUN = wasmtime
+WASI_RUN = wasmtime run
 NODE = node
 
 TARGET = wasm32-unknown-wasi

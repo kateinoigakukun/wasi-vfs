@@ -8,8 +8,8 @@ check: $(objs)
 #   200 entries x 20 chars file name is enough to overflow the initial buffer
 	@for i in $(shell seq 200); do touch "$(TMPDIR)/mnt/grow-buffer/dirent_with_long_name_$$i"; done
 	mkdir -p $(TMPDIR)/mnt/empty-dir
-	wasmtime --mapdir /mnt::$(TMPDIR)/mnt $(TMPDIR)/main.wasm
-	$(WASI_VFS_CLI) pack $(TMPDIR)/main.wasm --mapdir /mnt::$(TMPDIR)/mnt -o $(TMPDIR)/main.packed.wasm
+	wasmtime --dir $(TMPDIR)/mnt::/mnt $(TMPDIR)/main.wasm
+	$(WASI_VFS_CLI) pack $(TMPDIR)/main.wasm --dir $(TMPDIR)/mnt::/mnt -o $(TMPDIR)/main.packed.wasm
 	$(WASI_RUN) $(TMPDIR)/main.packed.wasm
 
 clean:
