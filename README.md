@@ -2,6 +2,9 @@
 
 [![Crates.io](https://img.shields.io/crates/v/wasi-vfs)](https://crates.io/crates/wasi-vfs)
 
+> [!TIP]
+> Please use [bytecodealliance/WASI-Virt](http://github.com/bytecodealliance/WASI-Virt) if you are using WASI Preview2 with [Component Model](https://github.com/WebAssembly/component-model)
+
 A virtual filesystem layer for WASI.
 
 > **NOTICE**: This project currently supports only WASI applications on the top of [wasi-libc](https://github.com/webassembly/wasi-libc)
