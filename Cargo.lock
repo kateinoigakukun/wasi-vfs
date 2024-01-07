@@ -1619,7 +1619,7 @@ dependencies = [
 
 [[package]]
 name = "wasi-libc-trampoline-bindgen"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "heck 0.4.1",
  "structopt",
@@ -1637,7 +1637,7 @@ dependencies = [
 
 [[package]]
 name = "wasi-vfs-cli"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "anyhow",
  "structopt",
