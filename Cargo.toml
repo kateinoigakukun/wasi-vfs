@@ -10,7 +10,7 @@ categories = ["wasm"]
 keywords = ["webassembly", "wasm", "wasi"]
 
 [lib]
-crate-type = ["staticlib", "cdylib"]
+crate-type = ["rlib", "staticlib", "cdylib"]
 
 [dependencies]
 wasi = "0.11.0"
