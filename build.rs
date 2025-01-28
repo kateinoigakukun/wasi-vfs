@@ -1,7 +1,7 @@
 use std::env;
 
 fn main() {
-    println!("cargo::rustc-check-cfg=cfg(cless)");
+    println!("cargo:rustc-check-cfg=cfg(cless)");
     if env::var("WASI_VFS_C_MODE").is_ok() {
         let triple = env::var("TARGET").expect("TARGET was not set");
         if !triple.starts_with("wasm32-") {
@@ -30,6 +30,8 @@ fn main() {
 
         build.compile("wasi_vfs_c");
     } else {
-        println!("cargo::rustc-cfg=cless")
+        println!("cargo:rustc-cfg=cless");
+        cc::Build::new().file("src/embed/linked_storage.c").compile("wasi_vfs_cless_c");
+        println!("cargo:rerun-if-changed=src/embed/linked_storage.c");
     }
 }

@@ -222,7 +222,7 @@ fn render_trace_syscall_entry_format_args(func: &InterfaceFunc, src: &mut String
 
 fn render_trampoline(func: &InterfaceFunc, name: &str, cless_name: &str, module: &Id, src: &mut String) {
     src.push_str(" #[no_mangle]\n");
-    src.push_str(&format!("#[cfg_attr(cless,export_name(\"{cless_name}\"))]\n"));
+    src.push_str(&format!("#[cfg_attr(cless,export_name = \"{cless_name}\")]\n"));
     src.push_str("pub unsafe extern \"C\" fn ");
     src.push_str(name);
 

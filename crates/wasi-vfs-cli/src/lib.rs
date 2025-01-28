@@ -103,7 +103,7 @@ pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(PathBuf, PathBuf)>, unishim: bool)
     //           and renames `__wasi_vfs_rt_init` to `_initialize`.
     //           And adds `__wasi_vfs_rt_init` as a new export duplicated from `_initialize`.
     // 3~n pack: Repeat the 2nd pack.
-    if is_wasi_reactor(wasm_bytes) {
+    if is_wasi_reactor(&wasm_bytes) {
         wizer.func_rename("_initialize", "__wasi_vfs_rt_init");
     }
     let output_bytes = wizer.run(&wasm_bytes)?;
