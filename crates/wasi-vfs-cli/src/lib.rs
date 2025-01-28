@@ -40,6 +40,10 @@ pub enum App {
         /// The file path to write the output Wasm module to.
         #[structopt(long, short, parse(from_os_str))]
         output: PathBuf,
+
+        ///C-less mode: if using the library in a Rust program or other language program, enable this
+        #[structopt(long)]
+        cless: bool,
     },
 }
 
@@ -55,6 +59,7 @@ impl App {
                 map_dirs,
                 dirs,
                 output,
+                cless
             } => {
                 let wasm_bytes = std::fs::read(&input)?;
                 if !map_dirs.is_empty() {
@@ -64,7 +69,7 @@ impl App {
                 let mut map_dirs = map_dirs;
                 map_dirs.extend(dirs.into_iter().map(|(a, b)| (b, a)));
 
-                let output_bytes = pack(&wasm_bytes, map_dirs)?;
+                let output_bytes = pack(&wasm_bytes, map_dirs, cless)?;
                 std::fs::write(output, output_bytes)?;
             }
         }
@@ -72,7 +77,14 @@ impl App {
     }
 }
 
-pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(PathBuf, PathBuf)>) -> Result<Vec<u8>> {
+pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(PathBuf, PathBuf)>, unishim: bool) -> Result<Vec<u8>> {
+    let wasm_bytes = if !unishim{
+        wasm_bytes.to_owned()
+    }else{
+        let mut m = waffle::Module::from_wasm_bytes(wasm_bytes, &Default::default())?;
+        waffle_unistub::unistub(&mut m, "wasi_vfs");
+        m.to_wasm_bytes()?
+    };
     std::env::set_var("__WASI_VFS_PACKING", "1");
     let mut wizer = wizer::Wizer::new();
     wizer.allow_wasi(true)?;

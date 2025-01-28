@@ -6,7 +6,7 @@ use crate::UserFd;
 use wasi::*;
 
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_advise"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_advise"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_advise(
     arg0: i32,
     arg1: i64,
@@ -44,7 +44,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_advise(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_allocate"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_allocate"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_allocate(
     arg0: i32,
     arg1: i64,
@@ -80,7 +80,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_allocate(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_close"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_close"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_close(arg0: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!("fd_close(fd: {})\n", arg0));
@@ -104,7 +104,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_close(arg0: i32) -> 
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_datasync"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_datasync"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_datasync(arg0: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!("fd_datasync(fd: {})\n", arg0));
@@ -128,7 +128,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_datasync(arg0: i32) 
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_fdstat_get"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_fdstat_get"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_get(
     arg0: i32,
     arg1: i32,
@@ -158,7 +158,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_get(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_flags")
+    export_name("wasi_vfs.wasi_snapshot_preview1.fd_fdstat_set_flags")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_flags(
     arg0: i32,
@@ -195,7 +195,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_flags(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_rights")
+    export_name("wasi_vfs.wasi_snapshot_preview1.fd_fdstat_set_rights")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_rights(
     arg0: i32,
@@ -232,7 +232,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_rights(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_filestat_get"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_filestat_get"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_get(
     arg0: i32,
     arg1: i32,
@@ -262,7 +262,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_get(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_size")
+    export_name("wasi_vfs.wasi_snapshot_preview1.fd_filestat_set_size")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_size(
     arg0: i32,
@@ -295,7 +295,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_size(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_times")
+    export_name("wasi_vfs.wasi_snapshot_preview1.fd_filestat_set_times")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_times(
     arg0: i32,
@@ -334,7 +334,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_times(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_pread"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_pread"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_pread(
     arg0: i32,
     arg1: i32,
@@ -373,7 +373,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_pread(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_prestat_get"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_prestat_get"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_prestat_get(
     arg0: i32,
     arg1: i32,
@@ -403,7 +403,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_prestat_get(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_fd_prestat_dir_name")
+    export_name("wasi_vfs.wasi_snapshot_preview1.fd_prestat_dir_name")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_prestat_dir_name(
     arg0: i32,
@@ -440,7 +440,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_prestat_dir_name(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_pwrite"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_pwrite"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_pwrite(
     arg0: i32,
     arg1: i32,
@@ -479,7 +479,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_pwrite(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_read"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_read"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_read(
     arg0: i32,
     arg1: i32,
@@ -516,7 +516,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_read(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_readdir"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_readdir"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_readdir(
     arg0: i32,
     arg1: i32,
@@ -556,7 +556,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_readdir(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_renumber"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_renumber"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_renumber(arg0: i32, arg1: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!("fd_renumber(fd: {}, to: {})\n", arg0, arg1));
@@ -580,7 +580,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_renumber(arg0: i32, 
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_seek"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_seek"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_seek(
     arg0: i32,
     arg1: i64,
@@ -613,7 +613,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_seek(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_sync"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_sync"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_sync(arg0: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!("fd_sync(fd: {})\n", arg0));
@@ -637,7 +637,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_sync(arg0: i32) -> i
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_tell"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_tell"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_tell(arg0: i32, arg1: i32) -> i32 {
     #[cfg(feature = "trace-syscall")]
     crate::trace::trace_syscall_entry(format_args!("fd_tell(fd: {})\n", arg0));
@@ -662,7 +662,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_tell(arg0: i32, arg1
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_fd_write"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.fd_write"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_write(
     arg0: i32,
     arg1: i32,
@@ -701,7 +701,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_write(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_path_create_directory")
+    export_name("wasi_vfs.wasi_snapshot_preview1.path_create_directory")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_create_directory(
     arg0: i32,
@@ -743,7 +743,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_create_directory(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_path_filestat_get")
+    export_name("wasi_vfs.wasi_snapshot_preview1.path_filestat_get")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_filestat_get(
     arg0: i32,
@@ -794,7 +794,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_filestat_get(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_path_filestat_set_times")
+    export_name("wasi_vfs.wasi_snapshot_preview1.path_filestat_set_times")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_filestat_set_times(
     arg0: i32,
@@ -852,7 +852,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_filestat_set_times
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_path_link"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.path_link"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_link(
     arg0: i32,
     arg1: i32,
@@ -912,7 +912,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_link(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_path_open"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.path_open"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_open(
     arg0: i32,
     arg1: i32,
@@ -965,7 +965,7 @@ crate::trace::trace_syscall_entry(format_args!("path_open(fd: {}, dirflags: {}, 
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_path_readlink"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.path_readlink"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_readlink(
     arg0: i32,
     arg1: i32,
@@ -1018,7 +1018,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_readlink(
 #[no_mangle]
 #[cfg_attr(
     cless,
-    export_name("wasi_vfs_wasi_snapshot_preview1_path_remove_directory")
+    export_name("wasi_vfs.wasi_snapshot_preview1.path_remove_directory")
 )]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_remove_directory(
     arg0: i32,
@@ -1058,7 +1058,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_remove_directory(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_path_rename"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.path_rename"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_rename(
     arg0: i32,
     arg1: i32,
@@ -1115,7 +1115,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_rename(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_path_symlink"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.path_symlink"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_symlink(
     arg0: i32,
     arg1: i32,
@@ -1169,7 +1169,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_symlink(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_path_unlink_file"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.path_unlink_file"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_unlink_file(
     arg0: i32,
     arg1: i32,
@@ -1208,7 +1208,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_unlink_file(
     }
 }
 #[no_mangle]
-#[cfg_attr(cless, export_name("wasi_vfs_wasi_snapshot_preview1_poll_oneoff"))]
+#[cfg_attr(cless, export_name("wasi_vfs.wasi_snapshot_preview1.poll_oneoff"))]
 pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_poll_oneoff(
     arg0: i32,
     arg1: i32,

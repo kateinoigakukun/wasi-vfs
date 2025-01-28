@@ -161,6 +161,7 @@ impl Render for Module {
             render_trampoline(
                 &*f,
                 &format!("wasi_vfs_{}_{}", self.name.as_str(), f_name.to_snake_case()),
+                &format!("wasi_vfs.{}.{}",self.name.as_str(),f_name.to_snake_case()),
                 &self.name,
                 src,
             );
@@ -219,9 +220,9 @@ fn render_trace_syscall_entry_format_args(func: &InterfaceFunc, src: &mut String
     src.push(')');
 }
 
-fn render_trampoline(func: &InterfaceFunc, name: &str, module: &Id, src: &mut String) {
+fn render_trampoline(func: &InterfaceFunc, name: &str, cless_name: &str, module: &Id, src: &mut String) {
     src.push_str(" #[no_mangle]\n");
-    src.push_str(&format!("#[cfg_attr(cless,export_name(\"{name}\"))]\n"));
+    src.push_str(&format!("#[cfg_attr(cless,export_name(\"{cless_name}\"))]\n"));
     src.push_str("pub unsafe extern \"C\" fn ");
     src.push_str(name);
 

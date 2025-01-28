@@ -8,7 +8,9 @@ name = "wasi-vfs"
 
 [dependencies]
 anyhow = "1.0.40"
+portal-pc-waffle = "0.3.6"
 structopt = "0.3.21"
+waffle-unistub = "0.4.3"
 wasm-encoder = "0.212.0"
 wasmparser = "0.212.0"
 wizer = "6.0.0"
