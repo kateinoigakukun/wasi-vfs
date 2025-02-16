@@ -4,7 +4,15 @@ use anyhow::Result;
 use structopt::StructOpt;
 mod module_link;
 
-fn parse_map_dirs(s: &str) -> anyhow::Result<(PathBuf, PathBuf)> {
+fn parse_map_dirs(s: &str) -> anyhow::Result<(String, PathBuf)> {
+    let parts: Vec<&str> = s.split("::").collect();
+    if parts.len() != 2 {
+        anyhow::bail!("must contain exactly one double colon ('::')");
+    }
+    Ok((parts[0].into(), parts[1].into()))
+}
+
+fn parse_dirs(s: &str) -> anyhow::Result<(PathBuf, String)> {
     let parts: Vec<&str> = s.split("::").collect();
     if parts.len() != 2 {
         anyhow::bail!("must contain exactly one double colon ('::')");
@@ -31,11 +39,11 @@ pub enum App {
 
         /// Package a host directory into Wasm module at a guest directory
         #[structopt(long = "mapdir", value_name = "GUEST_DIR::HOST_DIR", parse(try_from_str = parse_map_dirs))]
-        map_dirs: Vec<(PathBuf, PathBuf)>,
+        map_dirs: Vec<(String, PathBuf)>,
 
         /// Package a host directory into Wasm module at a guest directory
-        #[structopt(long = "dir", value_name = "HOST_DIR::GUEST_DIR", parse(try_from_str = parse_map_dirs))]
-        dirs: Vec<(PathBuf, PathBuf)>,
+        #[structopt(long = "dir", value_name = "HOST_DIR::GUEST_DIR", parse(try_from_str = parse_dirs))]
+        dirs: Vec<(PathBuf, String)>,
 
         /// The file path to write the output Wasm module to.
         #[structopt(long, short, parse(from_os_str))]
@@ -72,7 +80,7 @@ impl App {
     }
 }
 
-pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(PathBuf, PathBuf)>) -> Result<Vec<u8>> {
+pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Result<Vec<u8>> {
     std::env::set_var("__WASI_VFS_PACKING", "1");
     let mut wizer = wizer::Wizer::new();
     wizer.allow_wasi(true)?;
