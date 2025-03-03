@@ -6,6 +6,7 @@ const path = require("path");
 const buffer = fs.readFileSync(process.argv[2]);
 
 const wasi = new WASI({
+  version: "preview1",
   env: { ...process.env },
   preopens: {
     "/run": path.join(__dirname, "mnt", "run"),

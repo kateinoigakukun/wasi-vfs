@@ -17,6 +17,7 @@ const buffer = fs.readFileSync(args[0]);
 const stage = Number(args[1]);
 
 const wasi = new WASI({
+  version: "preview1",
   env: { ...process.env },
   preopens
 });
