@@ -2559,8 +2559,7 @@ dependencies = [
 [[package]]
 name = "wizer"
 version = "8.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eaecdae7465159e72b0cf6de6686fd0737f01e715f49a0adcbd89451ff8cb56a"
+source = "git+https://github.com/kateinoigakukun/wizer?branch=katei/add-env-option-8.0.0#446f0551ec261e38c4bd85d8e83de1df9c475074"
 dependencies = [
  "anyhow",
  "cap-std",
