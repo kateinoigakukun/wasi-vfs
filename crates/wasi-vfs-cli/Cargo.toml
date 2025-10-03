@@ -11,4 +11,4 @@ anyhow = "1.0.40"
 structopt = "0.3.21"
 wasm-encoder = "0.212.0"
 wasmparser = "0.212.0"
-wizer = "6.0.0"
+wizer = { git = "https://github.com/kateinoigakukun/wizer.git", branch = "katei/add-env-option-6.0.0" }

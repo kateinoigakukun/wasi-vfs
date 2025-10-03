@@ -78,7 +78,11 @@ pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(PathBuf, PathBuf)>) -> Result<Vec<
     wizer.allow_wasi(true)?;
     wizer.init_func("wasi_vfs_pack_fs");
     wizer.inherit_stdio(true);
-    wizer.inherit_env(true);
+    wizer.env("__WASI_VFS_PACKING", "1");
+    let verbose_env_key = "WASI_VFS_VERBOSE";
+    if let Ok(verbose) = std::env::var(verbose_env_key) {
+        wizer.env(verbose_env_key, &verbose);
+    }
     wizer.keep_init_func(true);
     wizer.wasm_bulk_memory(true);
     for (guest_dir, host_dir) in map_dirs {
