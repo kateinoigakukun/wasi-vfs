@@ -34,9 +34,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_advise(
             arg2 as u64,
             arg3,
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_advise", e.clone());
@@ -73,9 +71,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_allocate(
             arg1 as u64,
             arg2 as u64,
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_allocate", e.clone());
@@ -100,9 +96,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_close(arg0: i32) -> 
     };
     {
         match crate::wasi_snapshot_preview1::fd_close(fs, arg0 as UserFd) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_close", e.clone());
@@ -127,9 +121,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_datasync(arg0: i32) 
     };
     {
         match crate::wasi_snapshot_preview1::fd_datasync(fs, arg0 as UserFd) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_datasync", e.clone());
@@ -195,9 +187,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_flags(
             arg0 as UserFd,
             arg1 as Fdflags,
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_fdstat_set_flags", e.clone());
@@ -234,9 +224,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_fdstat_set_rights(
             arg1 as Rights,
             arg2 as Rights,
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_fdstat_set_rights", e.clone());
@@ -298,9 +286,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_size(
     };
     {
         match crate::wasi_snapshot_preview1::fd_filestat_set_size(fs, arg0 as UserFd, arg1 as u64) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_filestat_set_size", e.clone());
@@ -341,9 +327,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_filestat_set_times(
             arg2 as u64,
             arg3 as Fstflags,
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_filestat_set_times", e.clone());
@@ -453,9 +437,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_prestat_dir_name(
             arg1 as *mut u8,
             arg2 as u32,
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_prestat_dir_name", e.clone());
@@ -605,9 +587,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_renumber(arg0: i32, 
     };
     {
         match crate::wasi_snapshot_preview1::fd_renumber(fs, arg0 as UserFd, arg1 as UserFd) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_renumber", e.clone());
@@ -668,9 +648,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_fd_sync(arg0: i32) -> i
     };
     {
         match crate::wasi_snapshot_preview1::fd_sync(fs, arg0 as UserFd) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("fd_sync", e.clone());
@@ -778,9 +756,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_create_directory(
             let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
             std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes)
         }) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("path_create_directory", e.clone());
@@ -893,9 +869,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_filestat_set_times
             arg5 as u64,
             arg6 as Fstflags,
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("path_filestat_set_times", e.clone());
@@ -958,9 +932,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_link(
                 std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes)
             },
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("path_link", e.clone());
@@ -983,11 +955,20 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_open(
     arg8: i32,
 ) -> i32 {
     #[cfg(feature = "trace-syscall")]
-crate::trace::trace_syscall_entry(format_args!("path_open(fd: {}, dirflags: {}, path: {}, oflags: {}, fs_rights_base: {}, fs_rights_inheriting: {}, fdflags: {})\n", arg0, arg1, {
-                            let str_bytes = core::slice::from_raw_parts(arg2 as *const u8, (arg3 + 1) as usize);
-                            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
-                            cstr.to_str().unwrap().to_string()
-                        }, arg4, arg5, arg6, arg7));
+    crate::trace::trace_syscall_entry(format_args!(
+        "path_open(fd: {}, dirflags: {}, path: {}, oflags: {}, fs_rights_base: {}, fs_rights_inheriting: {}, fdflags: {})\n",
+        arg0,
+        arg1,
+        {
+            let str_bytes = core::slice::from_raw_parts(arg2 as *const u8, (arg3 + 1) as usize);
+            let cstr = std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes);
+            cstr.to_str().unwrap().to_string()
+        },
+        arg4,
+        arg5,
+        arg6,
+        arg7
+    ));
     let fs = if let Some(fs) = unsafe {
         (*std::ptr::addr_of_mut!(crate::GLOBAL_STATE))
             .overlay_fs
@@ -1114,9 +1095,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_remove_directory(
             let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
             std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes)
         }) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("path_remove_directory", e.clone());
@@ -1176,9 +1155,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_rename(
                 std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes)
             },
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("path_rename", e.clone());
@@ -1233,9 +1210,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_symlink(
                 std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes)
             },
         ) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("path_symlink", e.clone());
@@ -1275,9 +1250,7 @@ pub unsafe extern "C" fn wasi_vfs_wasi_snapshot_preview1_path_unlink_file(
             let str_bytes = core::slice::from_raw_parts(arg1 as *const u8, (arg2 + 1) as usize);
             std::ffi::CStr::from_bytes_with_nul_unchecked(str_bytes)
         }) {
-            Ok(e) => {
-                wasi::ERRNO_SUCCESS.raw() as i32
-            }
+            Ok(e) => wasi::ERRNO_SUCCESS.raw() as i32,
             Err(e) => {
                 #[cfg(feature = "trace-syscall")]
                 crate::trace::trace_syscall_error("path_unlink_file", e.clone());

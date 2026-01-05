@@ -66,7 +66,9 @@ impl App {
             } => {
                 let wasm_bytes = std::fs::read(&input)?;
                 if !map_dirs.is_empty() {
-                    eprintln!("warning: --mapdir GUIEST_DIR::HOST_DIR is deprecated, use --dir HOST_DIR::GUEST_DIR instead");
+                    eprintln!(
+                        "warning: --mapdir GUIEST_DIR::HOST_DIR is deprecated, use --dir HOST_DIR::GUEST_DIR instead"
+                    );
                 }
 
                 let mut map_dirs = map_dirs;
@@ -87,9 +89,7 @@ pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Result<Vec<u
 
     // Use tokio runtime for async wizer
     let runtime = tokio::runtime::Runtime::new()?;
-    runtime.block_on(async {
-        pack_async(wasm_bytes, map_dirs).await
-    })
+    runtime.block_on(async { pack_async(wasm_bytes, map_dirs).await })
 }
 
 async fn pack_async(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Result<Vec<u8>> {
@@ -136,13 +136,15 @@ async fn pack_async(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Resu
         wizer.func_rename("_initialize", "__wasi_vfs_rt_init");
     }
 
-    let output_bytes = wizer.run(&mut store, wasm_bytes, async |store, module| {
-        // Set up linker with WASI inside the closure
-        let mut linker = wasmtime::Linker::new(module.engine());
-        wasmtime_wasi::p1::add_to_linker_async(&mut linker, |x| x)?;
-        linker.define_unknown_imports_as_traps(module)?;
-        linker.instantiate_async(store, module).await
-    }).await?;
+    let output_bytes = wizer
+        .run(&mut store, wasm_bytes, async |store, module| {
+            // Set up linker with WASI inside the closure
+            let mut linker = wasmtime::Linker::new(module.engine());
+            wasmtime_wasi::p1::add_to_linker_async(&mut linker, |x| x)?;
+            linker.define_unknown_imports_as_traps(module)?;
+            linker.instantiate_async(store, module).await
+        })
+        .await?;
 
     let output_bytes = copy_export_entry(&output_bytes, "_initialize", "__wasi_vfs_rt_init")?;
     Ok(output_bytes)

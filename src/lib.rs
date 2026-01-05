@@ -161,7 +161,9 @@ unsafe extern "C" fn __internal_wasi_vfs_rt_init() {
     if env_var("__WASI_VFS_PACKING").is_some() {
         return;
     }
-    if let Some((embedded_fs, preopened_vfds)) = unsafe { (*std::ptr::addr_of_mut!(GLOBAL_STATE)).embedded_fs.take() } {
+    if let Some((embedded_fs, preopened_vfds)) =
+        unsafe { (*std::ptr::addr_of_mut!(GLOBAL_STATE)).embedded_fs.take() }
+    {
         let fs = FileSystem::create(embedded_fs, &preopened_vfds);
         unsafe {
             (*std::ptr::addr_of_mut!(GLOBAL_STATE)).overlay_fs = Some(fs);
@@ -175,7 +177,9 @@ unsafe extern "C" fn __internal_wasi_vfs_pack_fs() {
     std::panic::set_hook(Box::new(|info| {
         trace::print(format!("{}\n", info));
     }));
-    let (mut fs, preopened_vfds) = if let Some((fs, vfds)) = unsafe { (*std::ptr::addr_of_mut!(GLOBAL_STATE)).embedded_fs.take() } {
+    let (mut fs, preopened_vfds) = if let Some((fs, vfds)) =
+        unsafe { (*std::ptr::addr_of_mut!(GLOBAL_STATE)).embedded_fs.take() }
+    {
         (fs, vfds)
     } else {
         (EmbeddedFs::default(), vec![])

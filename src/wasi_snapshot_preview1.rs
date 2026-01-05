@@ -17,8 +17,8 @@ use wasi::{
 };
 
 use crate::{
-    embed::{Node, NodeDirBody, NodeFileBody, NodeIdTrait, Storage},
     BackingFd, Error, FileSystem, UserFd,
+    embed::{Node, NodeDirBody, NodeFileBody, NodeIdTrait, Storage},
 };
 
 pub(crate) unsafe fn fd_advise<S: Storage>(

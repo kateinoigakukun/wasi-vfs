@@ -46,9 +46,7 @@ unsafe impl std::alloc::GlobalAlloc for WasiAllocator {
         unsafe extern "C" {
             fn free(ptr: *mut std::ffi::c_void);
         }
-        unsafe {
-            free(ptr as *mut std::ffi::c_void)
-        }
+        unsafe { free(ptr as *mut std::ffi::c_void) }
     }
 
     #[inline]
