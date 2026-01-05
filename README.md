@@ -110,7 +110,7 @@ Hello
 ### Unit tests
 
 ```console
-$ CARGO_TARGET_WASM32_WASI_RUNNER=wasmtime cargo test --target wasm32-wasi
+$ CARGO_TARGET_WASM32_WASI_RUNNER=wasmtime cargo test --target wasm32-wasip1
 ```
 
 ### End-to-end tests

@@ -40,6 +40,6 @@ jobs:
       env:
         WASI_SDK_VERSION_MAJOR: 21
         WASI_SDK_VERSION_MINOR: 0
-    - run: CARGO_TARGET_WASM32_WASI_RUNNER=wasmtime cargo test --target wasm32-wasi
+    - run: CARGO_TARGET_WASM32_WASI_RUNNER=wasmtime cargo test --target wasm32-wasip1
     - run: cargo build --target wasm32-unknown-unknown
     - run: LIB_WASI_VFS_A=$PWD/target/wasm32-unknown-unknown/debug/libwasi_vfs.a ./tools/run-make-test.sh
