@@ -218,6 +218,7 @@ mod translate {
     pub(crate) fn export_kind(x: wasmparser::ExternalKind) -> wasm_encoder::ExportKind {
         match x {
             wasmparser::ExternalKind::Func => wasm_encoder::ExportKind::Func,
+            wasmparser::ExternalKind::FuncExact => wasm_encoder::ExportKind::Func,
             wasmparser::ExternalKind::Table => wasm_encoder::ExportKind::Table,
             wasmparser::ExternalKind::Memory => wasm_encoder::ExportKind::Memory,
             wasmparser::ExternalKind::Global => wasm_encoder::ExportKind::Global,
