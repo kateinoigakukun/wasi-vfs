@@ -84,20 +84,47 @@ pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Result<Vec<u
     unsafe {
         std::env::set_var("__WASI_VFS_PACKING", "1");
     }
-    let mut wizer = wizer::Wizer::new();
-    wizer.allow_wasi(true)?;
-    wizer.init_func("wasi_vfs_pack_fs");
-    wizer.inherit_stdio(true);
-    wizer.env("__WASI_VFS_PACKING", "1");
+
+    // Use tokio runtime for async wizer
+    let runtime = tokio::runtime::Runtime::new()?;
+    runtime.block_on(async {
+        pack_async(wasm_bytes, map_dirs).await
+    })
+}
+
+async fn pack_async(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Result<Vec<u8>> {
+    // Configure WASI
+    let mut wasi = wasmtime_wasi::WasiCtxBuilder::new();
+    wasi.inherit_stdio();
+    wasi.env("__WASI_VFS_PACKING", "1");
+
     let verbose_env_key = "WASI_VFS_VERBOSE";
     if let Ok(verbose) = std::env::var(verbose_env_key) {
-        wizer.env(verbose_env_key, &verbose);
+        wasi.env(verbose_env_key, &verbose);
     }
-    wizer.keep_init_func(true);
-    wizer.wasm_bulk_memory(true);
+
     for (guest_dir, host_dir) in map_dirs {
-        wizer.map_dir(guest_dir, host_dir);
+        wasi.preopened_dir(
+            host_dir,
+            guest_dir,
+            wasmtime_wasi::DirPerms::all(),
+            wasmtime_wasi::FilePerms::all(),
+        )?;
     }
+
+    // Configure Wasmtime
+    let mut config = wasmtime::Config::new();
+    config.wasm_bulk_memory(true);
+    config.async_support(true);
+
+    let engine = wasmtime::Engine::new(&config)?;
+    let mut store = wasmtime::Store::new(&engine, wasi.build_p1());
+
+    // Configure Wizer
+    let mut wizer = wasmtime_wizer::Wizer::new();
+    wizer.init_func("wasi_vfs_pack_fs");
+    wizer.keep_init_func(true);
+
     // For reactor modules, wasi-vfs needs some special initialization process.
     // 1st pack: Wizer removes `_initialize` and renames `__wasi_vfs_rt_init` to `_initialize`.
     //           And adds `__wasi_vfs_rt_init` as a new export duplicated from `_initialize`.
@@ -108,7 +135,15 @@ pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Result<Vec<u
     if is_wasi_reactor(wasm_bytes) {
         wizer.func_rename("_initialize", "__wasi_vfs_rt_init");
     }
-    let output_bytes = wizer.run(&wasm_bytes)?;
+
+    let output_bytes = wizer.run(&mut store, wasm_bytes, async |store, module| {
+        // Set up linker with WASI inside the closure
+        let mut linker = wasmtime::Linker::new(module.engine());
+        wasmtime_wasi::p1::add_to_linker_async(&mut linker, |x| x)?;
+        linker.define_unknown_imports_as_traps(module)?;
+        linker.instantiate_async(store, module).await
+    }).await?;
+
     let output_bytes = copy_export_entry(&output_bytes, "_initialize", "__wasi_vfs_rt_init")?;
     Ok(output_bytes)
 }
