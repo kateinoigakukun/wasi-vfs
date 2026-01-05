@@ -86,7 +86,7 @@ struct InnerLink {
     node: NodeId,
 }
 
-extern "C" {
+unsafe extern "C" {
     fn wasi_vfs_embed_linked_storage_new() -> *mut std::ffi::c_void;
     fn wasi_vfs_embed_linked_storage_free(context: *mut std::ffi::c_void);
     fn wasi_vfs_embed_linked_storage_preopen_new_dir(context: *mut std::ffi::c_void) -> NodeLink;

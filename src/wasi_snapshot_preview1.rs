@@ -923,15 +923,17 @@ pub(crate) unsafe fn poll_oneoff<S: Storage>(
         }
     }
     let mut rp0 = MaybeUninit::<Fdstat>::uninit();
-    let ret = wasi::wasi_snapshot_preview1::poll_oneoff(
-        new_in.as_ptr() as i32,
-        out as i32,
-        nsubscriptions as i32,
-        rp0.as_mut_ptr() as i32,
-    );
+    let ret = unsafe {
+        wasi::wasi_snapshot_preview1::poll_oneoff(
+            new_in.as_ptr() as i32,
+            out as i32,
+            nsubscriptions as i32,
+            rp0.as_mut_ptr() as i32,
+        )
+    };
 
     match ret {
-        0 => Ok(core::ptr::read(rp0.as_mut_ptr() as i32 as *const Size)),
+        0 => Ok(unsafe { core::ptr::read(rp0.as_mut_ptr() as i32 as *const Size) }),
         _ => Err(Error(ret as u16)),
     }
 }

@@ -51,7 +51,7 @@ impl<S: Storage> FileSystem<S> {
             fs.set_user_fd_at(BackingFd::Wasi(fd), fd);
         }
 
-        extern "C" {
+        unsafe extern "C" {
             fn __wasilibc_register_preopened_fd(fd: i32, name: *const u8) -> i32;
         }
 
@@ -150,28 +150,32 @@ fn env_var(name: &str) -> Option<String> {
 }
 
 /// Runtime entry point to initialize the virtual file system.
-#[no_mangle]
+#[unsafe(no_mangle)]
 unsafe extern "C" fn __internal_wasi_vfs_rt_init() {
-    extern "C" {
+    unsafe extern "C" {
         fn __wasi_vfs_force_link_init();
     }
-    __wasi_vfs_force_link_init();
+    unsafe {
+        __wasi_vfs_force_link_init();
+    }
     if env_var("__WASI_VFS_PACKING").is_some() {
         return;
     }
-    if let Some((embedded_fs, preopened_vfds)) = GLOBAL_STATE.embedded_fs.take() {
+    if let Some((embedded_fs, preopened_vfds)) = unsafe { (*std::ptr::addr_of_mut!(GLOBAL_STATE)).embedded_fs.take() } {
         let fs = FileSystem::create(embedded_fs, &preopened_vfds);
-        GLOBAL_STATE.overlay_fs = Some(fs);
+        unsafe {
+            (*std::ptr::addr_of_mut!(GLOBAL_STATE)).overlay_fs = Some(fs);
+        }
     }
 }
 
 /// Packing-time entry point to scan the host file system.
-#[no_mangle]
+#[unsafe(no_mangle)]
 unsafe extern "C" fn __internal_wasi_vfs_pack_fs() {
     std::panic::set_hook(Box::new(|info| {
         trace::print(format!("{}\n", info));
     }));
-    let (mut fs, preopened_vfds) = if let Some((fs, vfds)) = GLOBAL_STATE.embedded_fs.take() {
+    let (mut fs, preopened_vfds) = if let Some((fs, vfds)) = unsafe { (*std::ptr::addr_of_mut!(GLOBAL_STATE)).embedded_fs.take() } {
         (fs, vfds)
     } else {
         (EmbeddedFs::default(), vec![])
@@ -181,14 +185,18 @@ unsafe extern "C" fn __internal_wasi_vfs_pack_fs() {
         FsPacker::scan_preopened_dirs(&mut fs, preopened_vfds).unwrap();
     let packer = FsPacker::new(fs, preopened_vfds).unwrap();
     let fs = packer.pack(prestats).unwrap();
-    GLOBAL_STATE.embedded_fs = Some(fs);
+    unsafe {
+        (*std::ptr::addr_of_mut!(GLOBAL_STATE)).embedded_fs = Some(fs);
+    }
 
     #[cfg(not(feature = "module-linking"))]
     {
-        extern "C" {
+        unsafe extern "C" {
             fn __wasilibc_deinitialize_environ();
         }
-        __wasilibc_deinitialize_environ();
+        unsafe {
+            __wasilibc_deinitialize_environ();
+        }
     }
 }
 

@@ -220,7 +220,7 @@ fn render_trace_syscall_entry_format_args(func: &InterfaceFunc, src: &mut String
 }
 
 fn render_trampoline(func: &InterfaceFunc, name: &str, module: &Id, src: &mut String) {
-    src.push_str(" #[no_mangle]\n");
+    src.push_str(" #[unsafe(no_mangle)]\n");
     src.push_str("pub unsafe extern \"C\" fn ");
     src.push_str(name);
 
@@ -251,17 +251,17 @@ fn render_trampoline(func: &InterfaceFunc, name: &str, module: &Id, src: &mut St
     }
     {
         src.push_str(
-            "let fs = if let Some(fs) = crate::GLOBAL_STATE.overlay_fs.as_mut() { fs } else {\n",
+            "let fs = if let Some(fs) = unsafe { (*std::ptr::addr_of_mut!(crate::GLOBAL_STATE)).overlay_fs.as_mut() } { fs } else {\n",
         );
         src.push_str(&format!(
-            "return wasi::{}::{}(\n",
+            "return unsafe {{ wasi::{}::{}(\n",
             module.as_str(),
             func.name.as_str()
         ));
         for (i, _) in params.iter().enumerate() {
             src.push_str(&format!("arg{}, ", i));
         }
-        src.push_str(");\n");
+        src.push_str(") };\n");
         src.push_str("};\n");
     }
     func.call_interface(

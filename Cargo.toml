@@ -1,7 +1,7 @@
 [package]
 name = "wasi-vfs"
 version = "0.5.5"
-edition = "2021"
+edition = "2024"
 authors = ["Yuta Saito <kateinoigakukun@gmail.com>"]
 license = "Apache-2.0 WITH LLVM-exception"
 description = "A virtual filesystem layer for WASI"

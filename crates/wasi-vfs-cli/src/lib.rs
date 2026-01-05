@@ -81,7 +81,9 @@ impl App {
 }
 
 pub fn pack(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Result<Vec<u8>> {
-    std::env::set_var("__WASI_VFS_PACKING", "1");
+    unsafe {
+        std::env::set_var("__WASI_VFS_PACKING", "1");
+    }
     let mut wizer = wizer::Wizer::new();
     wizer.allow_wasi(true)?;
     wizer.init_func("wasi_vfs_pack_fs");
