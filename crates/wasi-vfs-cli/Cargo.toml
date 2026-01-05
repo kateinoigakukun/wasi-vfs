@@ -12,6 +12,30 @@ structopt = "0.3.21"
 tokio = { version = "1", features = ["rt"] }
 wasm-encoder = "0.243.0"
 wasmparser = "0.243.0"
-wasmtime = "40.0.0"
+# Use all default features except "profiling" which brings in ittapi-sys that causes
+# Windows linking errors with strnlen_s (requires Visual Studio 2026+ or specific SDK versions)
+wasmtime = { version = "40.0.0", default-features = false, features = [
+    "async",
+    "cache",
+    "gc",
+    "gc-drc",
+    "gc-null",
+    "wat",
+    "parallel-compilation",
+    "cranelift",
+    "pooling-allocator",
+    "demangle",
+    "addr2line",
+    "coredump",
+    "debug-builtins",
+    "runtime",
+    "component-model",
+    "component-model-async",
+    "threads",
+    "stack-switching",
+    "std",
+    "debug",
+    "compile-time-builtins",
+] }
 wasmtime-wasi = "40.0.0"
 wasmtime-wizer = { version = "40.0.0", features = ["wasmtime"] }
