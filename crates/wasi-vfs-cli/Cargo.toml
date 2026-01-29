@@ -1,6 +1,6 @@
 [package]
 name = "wasi-vfs-cli"
-version = "0.5.5"
+version = "0.6.2"
 edition = "2024"
 
 [[bin]]
