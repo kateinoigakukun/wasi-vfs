@@ -115,6 +115,7 @@ async fn pack_async(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Resu
     // Configure Wasmtime
     let mut config = wasmtime::Config::new();
     config.wasm_bulk_memory(true);
+    config.wasm_exceptions(true);
     config.async_support(true);
 
     let engine = wasmtime::Engine::new(&config)?;
@@ -144,7 +145,8 @@ async fn pack_async(wasm_bytes: &[u8], map_dirs: Vec<(String, PathBuf)>) -> Resu
             linker.define_unknown_imports_as_traps(module)?;
             linker.instantiate_async(store, module).await
         })
-        .await?;
+        .await
+        .map_err(|e| anyhow::anyhow!("wizer run failed: {e:?}"))?;
 
     let output_bytes = copy_export_entry(&output_bytes, "_initialize", "__wasi_vfs_rt_init")?;
     Ok(output_bytes)
